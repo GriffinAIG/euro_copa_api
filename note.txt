@@ -1,0 +1,84 @@
+value: vị trí
+value1: điểm
+value2: tỷ lệ
+
+history.status {
+  0: wheel1 khỏi tạo
+  1: wheel2 vào lượt
+  2: confirmed
+}
+
+
+{
+        typeGame: playWheelDto.typeGame,
+        turnNum: playWheelDto.numTurn,
+        coinUsed: coinUsed,
+        score: 0,
+        multiple: +multiple,
+        status: 0,
+        transRef1: transRef1,
+        ft: '',
+        sendStatus: StatusSend.INIT,
+        timeStart: new Date(),
+        timeEnd: new Date(),
+        userId: user.id,
+        createdAt: new Date(),
+        updatedAt: null
+      }
+
+listPoint.reduce((acc, item) => acc + Number(item.value1), 0)
+
+{"username":"testgame12","startDate":"", "endDate": ""}
+{"historyId":9,"startDate":"", "endDate": ""}
+{"typeGame":"WHEEL1","startDate":"", "endDate": ""}
+
+this.holdQuery(JSON.parse(paginationQueryDto.keyword), null)
+
+async getAllByhisId(hisId: number): Promise<any> {
+
+    if (!hisId) {
+      return "Lost histotyId to query";
+    }
+
+    try {
+      const datas = await this.historyDetailRepository.findAndCount({
+        relations: ["history"],
+        select: {
+          id: true,
+          history: {
+            id: true,
+          },
+          typeGame: true,
+          reward: true,
+          description: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+        where: {
+          history: {
+            id: hisId
+          }
+        },
+        order: { id: order },
+        take: perPage,
+        skip: skip,
+      });
+
+      return new SuccessResponse(
+        STATUSCODE.COMMON_SUCCESS,
+        datas,
+        MESSAGE.LIST_SUCCESS
+      );
+    } catch (error) {
+      this.logger.debug(
+        `${HistoryDetailService.name} is Logging error: ${JSON.stringify(
+          error
+        )}`
+      );
+      return new ErrorResponse(
+        STATUSCODE.COMMON_FAILED,
+        error,
+        MESSAGE.LIST_FAILED
+      );
+    }
+  }
