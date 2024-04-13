@@ -1,6 +1,6 @@
 import { BaseEntity } from 'src/common/common.dto/base.entity';
 import { Match } from 'src/components/match/entities/match.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 
 @Entity({ name: "team" })
 export class Team extends BaseEntity {

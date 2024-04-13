@@ -1,10 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
+import { Response } from "../../system/interfaces";
 import { TeamService } from './team.service';
 import { CreateTeamDto } from './dto/create-team.dto';
 import { UpdateTeamDto } from './dto/update-team.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RateLimitGuard } from '../auth/rate.guard/rate.limit.guard';
 import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
+import { Team } from './entities/team.entity';
+import { Roles } from '../auth/roles.guard/roles.decorator';
+import { UserRoles } from '../user/enums/user.enum';
 
 @Controller("/api/v1/team")
 @ApiTags("Team")
@@ -13,13 +17,20 @@ import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 export class TeamController {
   constructor(private readonly teamService: TeamService) { }
 
-  @Post()
-  create(@Body() createTeamDto: CreateTeamDto) {
-    return this.teamService.create(createTeamDto);
+  @Post("create")
+  @ApiOperation({
+    description: "Create a Team",
+  })
+  @ApiOkResponse({
+    type: Response<Team>,
+  })
+  @Roles(UserRoles.SUPPER)
+  async create(@Request() req: any, @Body() createTeamDto: CreateTeamDto): Promise<any> {
+    return this.teamService.createTeam(createTeamDto, req?.user?.name);
   }
 
-  @Get()
-  findAll() {
+  @Get("all")
+  async findAll(): Promise<any> {
     return this.teamService.findAll();
   }
 

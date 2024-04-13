@@ -1,10 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
+import { Response } from "../../system/interfaces";
 import { MatchService } from './match.service';
 import { CreateMatchDto } from './dto/create-match.dto';
 import { UpdateMatchDto } from './dto/update-match.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 import { RateLimitGuard } from '../auth/rate.guard/rate.limit.guard';
+import { Match } from './entities/match.entity';
+import { Roles } from '../auth/roles.guard/roles.decorator';
+import { UserRoles } from '../user/enums/user.enum';
 
 @Controller("/api/v1/match")
 @ApiTags("Match")
@@ -14,12 +18,19 @@ import { RateLimitGuard } from '../auth/rate.guard/rate.limit.guard';
 export class MatchController {
   constructor(private readonly matchService: MatchService) { }
 
-  @Post()
-  create(@Body() createMatchDto: CreateMatchDto) {
-    return this.matchService.create(createMatchDto);
+  @Post("create")
+  @ApiOperation({
+    description: "Create a Team",
+  })
+  @ApiOkResponse({
+    type: Response<Match>,
+  })
+  @Roles(UserRoles.SUPPER)
+  async create(@Request() req: any, @Body() createMatchDto: CreateMatchDto): Promise<any> {
+    return this.matchService.createMatch(createMatchDto, req?.user?.name);
   }
 
-  @Get()
+  @Get("all")
   findAll() {
     return this.matchService.findAll();
   }

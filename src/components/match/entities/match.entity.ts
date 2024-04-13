@@ -6,22 +6,22 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, UpdateDat
 @Entity({ name: "match" })
 export class Match extends BaseEntity {
 
-    @ManyToOne(() => Team, (team) => team.id, {
+    @ManyToOne(() => Team, (team: any) => team.id, {
         cascade: true,
         createForeignKeyConstraints: false,
     })
     teamA: Team;
 
-    @ManyToOne(() => Team, (team) => team.id, {
+    @ManyToOne(() => Team, (team: any) => team.id, {
         cascade: true,
         createForeignKeyConstraints: false,
     })
     teamB: Team;
 
-    @Column({ type: 'datetime' })
-    date: Date;
+    @Column({ nullable: false })
+    date: string;
 
-    @Column()
+    @Column({ nullable: false })
     matchRound: string;
 
     // Các dự đoán cho trận đấu
@@ -32,10 +32,10 @@ export class Match extends BaseEntity {
     predictions: Prediction[];
 
     // Kết quả của trận đấu
-    @Column({ nullable: true })
+    @Column({ nullable: true, default: '' })
     result: string;
 
-    @Column()
+    @Column({ nullable: false, default: '-1' })
     status: string; // -1: chưa diễn ra , 0 đang diễn ra, 1: đã kết thúc
 
 }
