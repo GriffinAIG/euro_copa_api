@@ -9,6 +9,7 @@ import {
   ErrorResponse,
 } from "../../system/BaseResponse/index";
 import { STATUSCODE, MESSAGE, ERROR } from "../../system/constants";
+import { PaginationQueryDto } from "src/common/common.dto";
 
 @Injectable()
 export class TeamService {
@@ -21,6 +22,15 @@ export class TeamService {
 
   async createTeam(createTeamDto: CreateTeamDto, username: string) {
     try {
+      const listTeam = await this.teamRepository.find({})
+      if (listTeam.some(team => team?.name.toLowerCase() === createTeamDto?.name.toLowerCase())) {
+        return new ErrorResponse(
+          STATUSCODE.COMMON_FAILED,
+          'team already existed',
+          ERROR.CREATE_FAILED
+        );
+      }
+
       const createdTeam = await this.teamRepository.create(
         createTeamDto
       );
@@ -48,9 +58,21 @@ export class TeamService {
     }
   }
 
-  async findAll() {
+  async findAll(paginationQueryDto: PaginationQueryDto) {
     try {
-      const listTeam = await this.teamRepository.findAndCount({})
+      const object: any = JSON.parse(paginationQueryDto.keyword); //use when where
+
+      const { take: perPage, skip: page } = paginationQueryDto;
+      if (page <= 0) {
+        return "The skip must be more than 0";
+      }
+      const skip = +perPage * +page - +perPage;
+
+      const listTeam = await this.teamRepository.findAndCount({
+        take: +perPage,
+        skip,
+        order: { id: paginationQueryDto.order },
+      })
 
       return new SuccessResponse(
         STATUSCODE.COMMON_SUCCESS,

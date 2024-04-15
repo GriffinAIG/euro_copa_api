@@ -1,7 +1,7 @@
 import { BaseEntity } from 'src/common/common.dto/base.entity';
 import { Prediction } from 'src/components/prediction/entities/prediction.entity';
 import { Team } from 'src/components/team/entities/team.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, UpdateDateColumn, CreateDateColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity({ name: "match" })
 export class Match extends BaseEntity {

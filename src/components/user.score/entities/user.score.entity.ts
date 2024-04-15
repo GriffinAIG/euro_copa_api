@@ -1,32 +1,37 @@
 import { BaseEntity } from 'src/common/common.dto/base.entity';
-import { Match } from 'src/components/match/entities/match.entity';
-import { Prediction } from 'src/components/prediction/entities/prediction.entity';
 import { User } from 'src/components/user/user.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 
 @Entity({ name: "user_score" })
 export class UserScore extends BaseEntity {
 
-    @ManyToOne(() => Prediction, (prediction) => prediction.id, {
-        cascade: true,
-        createForeignKeyConstraints: false,
-    })
-    prediction: Prediction;
-
     @Column({ default: '' })
-    source: string;
+    source: string;// from mission 1 ||2||top bxh
 
     @Column({ default: '' })
     description: string;
 
-    @Column({ default: '' })
-    note: string;
-
     @Column({ default: 0 })
-    goals: number;
+    goalsUsed: number;
 
     @Column({ default: 0 })
     score: number;
+
+    @Column({ type: "int", default: 5, nullable: false })
+    multiple: number;
+
+    @Column({ type: "integer", nullable: false })
+    status: number;
+
+    @Column({ type: "varchar", length: 15, nullable: true })
+    sendStatus: string;
+
+
+    @Column({ type: "varchar", length: 63, nullable: true })
+    transRef1: string;
+
+    @Column({ type: "varchar", length: 63, nullable: true })
+    ft: string;
 
     @ManyToOne(() => User, (user) => user.id, {
         cascade: true,

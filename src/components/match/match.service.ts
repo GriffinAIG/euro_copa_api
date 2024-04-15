@@ -10,6 +10,7 @@ import {
 } from "../../system/BaseResponse/index";
 import { STATUSCODE, MESSAGE, ERROR } from "../../system/constants";
 import { Team } from "../team/entities/team.entity";
+import { PaginationQueryDto } from "src/common/common.dto/pagination.query.dto";
 
 @Injectable()
 export class MatchService {
@@ -24,6 +25,43 @@ export class MatchService {
 
   async createMatch(createMatchDto: CreateMatchDto, username: string) {
     try {
+      const listMatch = await this.matchRepository.find({
+        relations: ["teamA", "teamB"],
+        select: {
+          id: true,
+          date: true,
+          matchRound: true,
+          result: true,
+          status: true,
+          teamA: {
+            id: true,
+            name: true,
+            flagUrl: true,
+            rewardTitle: true,
+            eliminated: true,
+          },
+          teamB: {
+            id: true,
+            name: true,
+            flagUrl: true,
+            rewardTitle: true,
+            eliminated: true,
+          },
+          isDeleted: true,
+          createdAt: true,
+          createdBy: true,
+          updatedAt: true,
+          updatedBy: true,
+        }
+      })
+      if (listMatch.some(match => (match?.teamA.id === createMatchDto.teamAId && match?.teamB.id === createMatchDto.teamBId))) {
+        return new ErrorResponse(
+          STATUSCODE.COMMON_FAILED,
+          'match already existed',
+          ERROR.CREATE_FAILED
+        );
+      }
+
       const createdMatch = this.matchRepository.create(
         {
           ...createMatchDto,
@@ -56,8 +94,16 @@ export class MatchService {
     }
   }
 
-  async findAll() {
+  async findAll(paginationQueryDto: PaginationQueryDto) {
     try {
+      const object: any = JSON.parse(paginationQueryDto.keyword); //use when where
+
+      const { take: perPage, skip: page } = paginationQueryDto;
+      if (page <= 0) {
+        return "The skip must be more than 0";
+      }
+      const skip = +perPage * +page - +perPage;
+
       const listMatch = await this.matchRepository.findAndCount({
         relations: ["teamA", "teamB"],
         select: {
@@ -85,7 +131,10 @@ export class MatchService {
           createdBy: true,
           updatedAt: true,
           updatedBy: true,
-        }
+        },
+        take: +perPage,
+        skip,
+        order: { id: paginationQueryDto.order },
       })
 
       return new SuccessResponse(
