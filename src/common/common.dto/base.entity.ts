@@ -1,47 +1,53 @@
-import { Column, CreateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
 export abstract class BaseEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @DeleteDateColumn()
-    deletedAt: Date;
+  @DeleteDateColumn()
+  deletedAt: Date;
 
-    @Column({
-        default: true,
-    })
-    isActive: boolean;
+  @Column({
+    default: true,
+  })
+  isActive: boolean;
 
-    @Column({
-        default: false,
-    })
-    isDeleted: boolean;
+  @Column({
+    default: false,
+  })
+  isDeleted: boolean;
 
-    @CreateDateColumn({
-        type: "timestamp",
-        nullable: false,
-        default: () => "CURRENT_TIMESTAMP(6)",
-    })
-    createdAt: Date;
+  @CreateDateColumn({
+    type: "timestamp",
+    nullable: false,
+    default: () => "CURRENT_TIMESTAMP(6)",
+  })
+  createdAt: Date;
 
-    @Column({
-        type: "varchar",
-        length: 255,
-        nullable: false,
-    })
-    createdBy: string;
+  @Column({
+    type: "varchar",
+    length: 255,
+    nullable: false,
+  })
+  createdBy: string;
 
-    @UpdateDateColumn({
-        type: "timestamp",
-        default: () => "CURRENT_TIMESTAMP(6)",
-        onUpdate: "CURRENT_TIMESTAMP(6)",
-    })
-    updatedAt: Date;
+  @UpdateDateColumn({
+    type: "timestamp",
+    default: () => "CURRENT_TIMESTAMP(6)",
+    onUpdate: "CURRENT_TIMESTAMP(6)",
+  })
+  updatedAt: Date;
 
-    @Column({
-        type: "varchar",
-        length: 255,
-        nullable: true,
-    })
-    updatedBy: string;
-};
+  @Column({
+    type: "varchar",
+    length: 255,
+    nullable: true,
+  })
+  updatedBy: string;
+}

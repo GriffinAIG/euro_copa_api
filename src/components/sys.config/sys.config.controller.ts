@@ -40,7 +40,7 @@ import { SysConfigsService } from "./sys.config.service";
 @ApiTags("SysConfigs")
 @ApiBearerAuth("Authorization")
 export class SysConfigsController {
-  constructor(private sysConfigsService: SysConfigsService) { }
+  constructor(private sysConfigsService: SysConfigsService) {}
 
   @Patch("ids")
   @ApiOperation({

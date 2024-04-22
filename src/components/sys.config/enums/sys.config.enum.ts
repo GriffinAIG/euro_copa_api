@@ -8,7 +8,6 @@ enum SysModuleEnum {
 enum SysItemEnum {
   MISSION_1_RULES = "mission_1_rules",
   MISSION_2_RULES = "mission_2_rules",
-
 }
 
 interface ValueRate {
@@ -46,5 +45,5 @@ export {
   SysItemEnum as SYS_ITEM_ENUM,
   SysModuleEnum as SYS_MODULE_ENUM,
   ValueRate,
-  getCalculateRate
+  getCalculateRate,
 };

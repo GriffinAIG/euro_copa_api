@@ -42,7 +42,7 @@ import PermissionUserDto from "./dto/permission.dto";
 @ApiBearerAuth("Authorization")
 @UseGuards(JwtAuthGuard, RateLimitGuard)
 export class UserController {
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService) {}
 
   @Get("user-info")
   @ApiOperation({

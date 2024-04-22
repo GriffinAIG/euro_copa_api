@@ -12,18 +12,21 @@ export class Prediction extends BaseEntity {
     })
     match: Match;
 
-    @Column()
+    @Column({ nullable: false })
     mission: number;
 
-    @Column()
-    predicted: string;
-
-    @Column()
+    @Column({ nullable: false, default: 0 })
     status: string; // 0: chưa có kq, 1: đã có kq
 
-    @Column()
-    predictedResult: string; //nv1: 'doivodich-doiaquan-tysochungket' ex: 
-    //nv2: 'win-teamA' || 'draw'( chỉ có ở vòng bảng )
+    @Column({ nullable: false, default: "" })
+    predicted: string;
+
+    @Column({ nullable: true, default: "" })
+    matchResult: string; //nv1: 'doivodich-doiaquan-tysochungket' ex:  ''
+    //nv2: 'teamId-teamName-win' || 'draw'( chỉ có ở vòng bảng )
+
+    @Column({ nullable: true, default: "" })
+    result: string; // -1: sai , 1: đúng
 
     @ManyToOne(() => User, (user) => user.id, {
         cascade: true,

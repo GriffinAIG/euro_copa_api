@@ -4,7 +4,6 @@ import { BaseEntity } from "src/common/common.dto/base.entity";
 
 @Entity({ name: "user_info" })
 export class UserInfo extends BaseEntity {
-
   @ManyToOne(() => User, (user: any) => user.id, {
     cascade: true,
     createForeignKeyConstraints: false,

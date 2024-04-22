@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserScoreDto } from './dto/create-user.score.dto';
-import { UpdateUserScoreDto } from './dto/update-user.score.dto';
+import { Injectable } from "@nestjs/common";
+import { CreateUserScoreDto } from "./dto/create-user.score.dto";
+import { UpdateUserScoreDto } from "./dto/update-user.score.dto";
 
 @Injectable()
 export class UserScoreService {
   create(createUserScoreDto: CreateUserScoreDto) {
-    return 'This action adds a new userScore';
+    return "This action adds a new userScore";
   }
 
   findAll() {

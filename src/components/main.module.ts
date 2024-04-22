@@ -6,13 +6,13 @@ import { PermissionModule } from "./permission/permission.module";
 import { UserModule } from "./user/user.module";
 import { UserInfoModule } from "./user.info/user.info.module";
 import { SysConfigsModule } from "./sys.config/sys.config.module";
-import { TeamModule } from './team/team.module';
-import { MatchModule } from './match/match.module';
-import { PredictionModule } from './prediction/prediction.module';
-import { UserScoreModule } from './user.score/user.score.module';
+import { TeamModule } from "./team/team.module";
+import { MatchModule } from "./match/match.module";
+import { PredictionModule } from "./prediction/prediction.module";
+import { UserScoreModule } from "./user.score/user.score.module";
 import { UserHistoryModule } from "./user.history/user.history.module";
 import { EventTimeModule } from "./event.time.third/event.time.third.module";
-import { UserGoalModule } from './user.goal/user.goal.module';
+import { UserGoalModule } from "./user.goal/user.goal.module";
 
 @Module({
   imports: [
@@ -32,4 +32,4 @@ import { UserGoalModule } from './user.goal/user.goal.module';
     UserGoalModule,
   ],
 })
-export class MainModule { }
+export class MainModule {}

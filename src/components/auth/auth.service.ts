@@ -28,7 +28,7 @@ export class AuthService {
     private backlistService: BacklistService,
     private readonly userHistoryService: UserHistoryService,
     private readonly connectService: ConnectService
-  ) { }
+  ) {}
 
   async validateUserCreds(username: string, password: string): Promise<any> {
     const user = await this.userService.getByUsername(username);

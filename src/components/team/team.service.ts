@@ -1,9 +1,9 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { CreateTeamDto } from './dto/create-team.dto';
-import { UpdateTeamDto } from './dto/update-team.dto';
-import { Team } from './entities/team.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { CreateTeamDto } from "./dto/create-team.dto";
+import { UpdateTeamDto } from "./dto/update-team.dto";
+import { Team } from "./entities/team.entity";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 import {
   SuccessResponse,
   ErrorResponse,
@@ -16,28 +16,30 @@ export class TeamService {
   constructor(
     @InjectRepository(Team)
     private teamRepository: Repository<Team>
-  ) { }
+  ) {}
 
   private readonly logger = new Logger(TeamService.name);
 
   async createTeam(createTeamDto: CreateTeamDto, username: string) {
     try {
-      const listTeam = await this.teamRepository.find({})
-      if (listTeam.some(team => team?.name.toLowerCase() === createTeamDto?.name.toLowerCase())) {
+      const listTeam = await this.teamRepository.find({});
+      if (
+        listTeam.some(
+          (team) =>
+            team?.name.toLowerCase() === createTeamDto?.name.toLowerCase()
+        )
+      ) {
         return new ErrorResponse(
           STATUSCODE.COMMON_FAILED,
-          'team already existed',
+          "team already existed",
           ERROR.CREATE_FAILED
         );
       }
 
-      const createdTeam = await this.teamRepository.create(
-        createTeamDto
-      );
-      createdTeam.rewardTitle = ''
-      createdTeam.eliminated = false
-      createdTeam.createdBy = username
-
+      const createdTeam = await this.teamRepository.create(createTeamDto);
+      createdTeam.rewardTitle = "";
+      createdTeam.eliminated = false;
+      createdTeam.createdBy = username;
 
       const savedTeam = await this.teamRepository.save(createdTeam);
 
@@ -72,7 +74,7 @@ export class TeamService {
         take: +perPage,
         skip,
         order: { id: paginationQueryDto.order },
-      })
+      });
 
       return new SuccessResponse(
         STATUSCODE.COMMON_SUCCESS,

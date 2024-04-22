@@ -1,9 +1,9 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { CreateMatchDto } from './dto/create-match.dto';
-import { UpdateMatchDto } from './dto/update-match.dto';
-import { Match } from './entities/match.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { CreateMatchDto } from "./dto/create-match.dto";
+import { UpdateMatchDto } from "./dto/update-match.dto";
+import { Match } from "./entities/match.entity";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 import {
   SuccessResponse,
   ErrorResponse,
@@ -25,55 +25,33 @@ export class MatchService {
 
   async createMatch(createMatchDto: CreateMatchDto, username: string) {
     try {
-      const listMatch = await this.matchRepository.find({
-        relations: ["teamA", "teamB"],
-        select: {
-          id: true,
-          date: true,
-          matchRound: true,
-          result: true,
-          status: true,
-          teamA: {
-            id: true,
-            name: true,
-            flagUrl: true,
-            rewardTitle: true,
-            eliminated: true,
-          },
-          teamB: {
-            id: true,
-            name: true,
-            flagUrl: true,
-            rewardTitle: true,
-            eliminated: true,
-          },
-          isDeleted: true,
-          createdAt: true,
-          createdBy: true,
-          updatedAt: true,
-          updatedBy: true,
+      const matchFind = await this.matchRepository.findOneBy({
+        teamA: {
+          id: createMatchDto.teamAId
+        },
+        teamB: {
+          id: createMatchDto.teamBId
         }
-      })
-      if (listMatch.some(match => (match?.teamA.id === createMatchDto.teamAId && match?.teamB.id === createMatchDto.teamBId))) {
+      });
+      if (matchFind) {
         return new ErrorResponse(
           STATUSCODE.COMMON_FAILED,
-          'match already existed',
+          "match already existed",
           ERROR.CREATE_FAILED
         );
       }
 
-      const createdMatch = this.matchRepository.create(
-        {
-          ...createMatchDto,
-          createdBy: username,
-          teamA: {
-            id: createMatchDto.teamAId
-          },
-          teamB: {
-            id: createMatchDto.teamBId
-          }
-        }
-      );
+      const createdMatch = this.matchRepository.create({
+        ...createMatchDto,
+        matchName: `${createMatchDto.teamAName}-${createMatchDto.teamBName}`,
+        createdBy: username,
+        teamA: {
+          id: createMatchDto.teamAId,
+        },
+        teamB: {
+          id: createMatchDto.teamBId,
+        },
+      });
 
       const savedMatch = await this.matchRepository.save(createdMatch);
 
@@ -110,6 +88,8 @@ export class MatchService {
           id: true,
           date: true,
           matchRound: true,
+          matchName: true,
+          tournament: true,
           result: true,
           status: true,
           teamA: {
@@ -135,7 +115,7 @@ export class MatchService {
         take: +perPage,
         skip,
         order: { id: paginationQueryDto.order },
-      })
+      });
 
       return new SuccessResponse(
         STATUSCODE.COMMON_SUCCESS,
@@ -154,8 +134,58 @@ export class MatchService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} match`;
+  async findOne(id: number) {
+    try {
+      const match = await this.matchRepository.findOne({
+        relations: ["teamA", "teamB"],
+        select: {
+          id: true,
+          date: true,
+          matchRound: true,
+          matchName: true,
+          tournament: true,
+          result: true,
+          status: true,
+          teamA: {
+            id: true,
+            name: true,
+            flagUrl: true,
+            rewardTitle: true,
+            eliminated: true,
+          },
+          teamB: {
+            id: true,
+            name: true,
+            flagUrl: true,
+            rewardTitle: true,
+            eliminated: true,
+          },
+          isDeleted: true,
+          createdAt: true,
+          createdBy: true,
+          updatedAt: true,
+          updatedBy: true,
+        },
+        where: {
+          id: id
+        }
+      });
+
+      return new SuccessResponse(
+        STATUSCODE.COMMON_SUCCESS,
+        match,
+        MESSAGE.CREATE_SUCCESS
+      );
+    } catch (error) {
+      this.logger.debug(
+        `${MatchService.name} is Logging error: ${JSON.stringify(error)}`
+      );
+      return new ErrorResponse(
+        STATUSCODE.COMMON_FAILED,
+        error,
+        ERROR.CREATE_FAILED
+      );
+    }
   }
 
   update(id: number, updateTeamDto: UpdateMatchDto) {

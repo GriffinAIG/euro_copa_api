@@ -4,7 +4,6 @@ import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
 @Entity({ name: "sys_configs" })
 @Index("module_index", ["module"], { unique: false })
 export class SysConfig extends BaseEntity {
-
   @Column({
     type: "varchar",
     length: 225,
@@ -28,5 +27,4 @@ export class SysConfig extends BaseEntity {
 
   @Column({ nullable: true, default: false })
   isNotDelete: boolean;
-
 }

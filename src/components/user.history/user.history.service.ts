@@ -348,13 +348,13 @@ export class UserHistoryService {
     // delete lotery request
     const data = await this.userHistoryRepository.find({
       where: {
-        createdAt: LessThan(timeCheck)
-      }
+        createdAt: LessThan(timeCheck),
+      },
     });
     if (data?.length > 0) {
       data.map(async (item) => {
-        await this.userHistoryRepository.delete(item?.id)
-      })
+        await this.userHistoryRepository.delete(item?.id);
+      });
     }
   }
 }

@@ -1,22 +1,40 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Request,
+  Query,
+} from "@nestjs/common";
 import { Response } from "../../system/interfaces";
-import { TeamService } from './team.service';
-import { CreateTeamDto } from './dto/create-team.dto';
-import { UpdateTeamDto } from './dto/update-team.dto';
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { RateLimitGuard } from '../auth/rate.guard/rate.limit.guard';
-import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
-import { Team } from './entities/team.entity';
-import { Roles } from '../auth/roles.guard/roles.decorator';
-import { UserRoles } from '../user/enums/user.enum';
-import { PaginationQueryDto } from 'src/common/common.dto/pagination.query.dto';
+import { TeamService } from "./team.service";
+import { CreateTeamDto } from "./dto/create-team.dto";
+import { UpdateTeamDto } from "./dto/update-team.dto";
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
+import { RateLimitGuard } from "../auth/rate.guard/rate.limit.guard";
+import { JwtAuthGuard } from "../auth/jwt/jwt-auth.guard";
+import { Team } from "./entities/team.entity";
+import { Roles } from "../auth/roles.guard/roles.decorator";
+import { UserRoles } from "../user/enums/user.enum";
+import { PaginationQueryDto } from "src/common/common.dto/pagination.query.dto";
 
 @Controller("/api/v1/team")
 @ApiTags("Team")
 @ApiBearerAuth("Authorization")
 @UseGuards(JwtAuthGuard, RateLimitGuard)
 export class TeamController {
-  constructor(private readonly teamService: TeamService) { }
+  constructor(private readonly teamService: TeamService) {}
 
   @Post("create")
   @ApiOperation({
@@ -26,7 +44,10 @@ export class TeamController {
     type: Response<Team>,
   })
   @Roles(UserRoles.SUPPER)
-  async create(@Request() req: any, @Body() createTeamDto: CreateTeamDto): Promise<any> {
+  async create(
+    @Request() req: any,
+    @Body() createTeamDto: CreateTeamDto
+  ): Promise<any> {
     return this.teamService.createTeam(createTeamDto, req?.user?.name);
   }
 
@@ -60,18 +81,18 @@ export class TeamController {
     return this.teamService.findAll(paginationQueryDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get(":id")
+  findOne(@Param("id") id: string) {
     return this.teamService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTeamDto: UpdateTeamDto) {
+  @Patch(":id")
+  update(@Param("id") id: string, @Body() updateTeamDto: UpdateTeamDto) {
     return this.teamService.update(+id, updateTeamDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete(":id")
+  remove(@Param("id") id: string) {
     return this.teamService.remove(+id);
   }
 }

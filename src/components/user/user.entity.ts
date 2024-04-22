@@ -10,6 +10,8 @@ import { BcryptSalt } from "../../system/constants/bcrypt.salt";
 import { UserRoles } from "./enums/user.enum";
 import { UserInfo } from "../user.info/user.info.entity";
 import { UserScore } from "../user.score/entities/user.score.entity";
+import { UserGoal } from "../user.goal/entities/user.goal.entity";
+import { Prediction } from "../prediction/entities/prediction.entity";
 @Entity({ name: "users" })
 export class User {
   @PrimaryGeneratedColumn()
@@ -36,22 +38,32 @@ export class User {
   @Column({ type: "varchar", length: 511, nullable: true, default: "" })
   option: string;
 
-
   @Column({ type: "boolean", default: false })
   isDeleted: boolean;
 
   @Column({ type: "boolean", default: false })
   isBlocked: boolean;
 
-
   @OneToMany(() => UserInfo, (userInfo) => userInfo.user)
   userInfo: UserInfo[];
+
+  @OneToMany(() => Prediction, (prediction) => prediction.id, {
+    cascade: true,
+    createForeignKeyConstraints: false,
+  })
+  prediction: Prediction;
+
+  @OneToMany(() => UserGoal, (userGoal) => userGoal.id, {
+    cascade: true,
+    createForeignKeyConstraints: false,
+  })
+  userGoal: UserGoal;
 
   @OneToMany(() => UserScore, (userScore) => userScore.id, {
     cascade: true,
     createForeignKeyConstraints: false,
   })
-  user: User
+  userScore: UserScore;
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   public createdAt!: Date;

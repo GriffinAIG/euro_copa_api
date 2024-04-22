@@ -15,10 +15,7 @@ import { ERROR, MESSAGE, STATUSCODE } from "../../system/constants";
 import { UserRoles } from "../user/enums/user.enum";
 import { User } from "../user/user.entity";
 import { CreateSysConfigsDto, UpdateSysConfigsDto } from "./dto";
-import {
-  SYS_ITEM_ENUM,
-  SYS_MODULE_ENUM,
-} from "./enums/sys.config.enum";
+import { SYS_ITEM_ENUM, SYS_MODULE_ENUM } from "./enums/sys.config.enum";
 import { SysConfig } from "./sys.config.entity";
 // import { getTunrnWithCycle } from "../ticket1/ticket1.service";
 import { Helper } from "src/common/helper";
@@ -33,7 +30,7 @@ export class SysConfigsService {
     private userRepository: Repository<User>,
     @Inject("winston")
     private readonly logger: Logger
-  ) { }
+  ) {}
 
   async getAll(paginationQueryDto: PaginationQueryDto): Promise<BaseResponse> {
     try {
@@ -334,6 +331,4 @@ export class SysConfigsService {
       );
     }
   }
-
 }
-

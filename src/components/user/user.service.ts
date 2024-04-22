@@ -23,7 +23,7 @@ export class UserService {
     private userRepository: Repository<User>,
     @Inject("winston")
     private readonly logger: Logger
-  ) { }
+  ) {}
 
   async getByUsername(username: string, isAdmin = false) {
     let user = await this.userRepository.findOne({

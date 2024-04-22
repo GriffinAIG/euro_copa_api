@@ -19,7 +19,7 @@ export class UserInfoService {
     private userInfoRepository: Repository<UserInfo>,
     private connectService: ConnectService,
     private userService: UserService
-  ) { }
+  ) {}
 
   private readonly logger = new Logger(UserInfoService.name);
 
@@ -157,7 +157,6 @@ export class UserInfoService {
 
   async update(id: number, updateDto: UpdateUserInfoDto): Promise<any> {
     try {
-
       let foundDto = await this.userInfoRepository.findOneBy({
         id,
       });
