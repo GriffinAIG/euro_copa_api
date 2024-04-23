@@ -27,13 +27,17 @@ import { Match } from "./entities/match.entity";
 import { Roles } from "../auth/roles.guard/roles.decorator";
 import { UserRoles } from "../user/enums/user.enum";
 import { PaginationQueryDto } from "src/common/common.dto/pagination.query.dto";
+import { CrawlerDataService } from "../crawler-data/crawler-data.service";
 
 @Controller("/api/v1/match")
 @ApiTags("Match")
 @ApiBearerAuth("Authorization")
 @UseGuards(JwtAuthGuard, RateLimitGuard)
 export class MatchController {
-  constructor(private readonly matchService: MatchService) {}
+  constructor(
+    private readonly matchService: MatchService,
+    private readonly crawlerDataService: CrawlerDataService
+  ) { }
 
   @Post("create")
   @ApiOperation({
@@ -78,6 +82,17 @@ export class MatchController {
   })
   findAll(@Query() paginationQueryDto: PaginationQueryDto) {
     return this.matchService.findAll(paginationQueryDto);
+  }
+
+  @Get("crawl")
+  @ApiOperation({
+    description: "crawl Match and Result",
+  })
+  // @ApiOkResponse({
+  //   type: Response<Match[]>,
+  // })
+  crawlData() {
+    return this.crawlerDataService.getFootballMatches()
   }
 
   @Get(":id")

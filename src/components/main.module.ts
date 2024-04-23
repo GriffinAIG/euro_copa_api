@@ -13,6 +13,8 @@ import { UserScoreModule } from "./user.score/user.score.module";
 import { UserHistoryModule } from "./user.history/user.history.module";
 import { EventTimeModule } from "./event.time.third/event.time.third.module";
 import { UserGoalModule } from "./user.goal/user.goal.module";
+import { GroupModule } from './group/group.module';
+import { CrawlerDataService } from './crawler-data/crawler-data.service';
 
 @Module({
   imports: [
@@ -30,6 +32,8 @@ import { UserGoalModule } from "./user.goal/user.goal.module";
     PredictionModule,
     UserScoreModule,
     UserGoalModule,
+    GroupModule,
   ],
+  providers: [CrawlerDataService],
 })
 export class MainModule {}

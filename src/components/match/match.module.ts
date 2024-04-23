@@ -5,11 +5,12 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { Match } from "./entities/match.entity";
 import { Team } from "../team/entities/team.entity";
 import { TeamModule } from "../team/team.module";
+import { CrawlerDataService } from "../crawler-data/crawler-data.service";
 
 @Module({
   imports: [TypeOrmModule.forFeature([Match, Team]), TeamModule],
   controllers: [MatchController],
-  providers: [MatchService],
+  providers: [MatchService, CrawlerDataService],
   exports: [MatchService],
 })
 export class MatchModule { }
